@@ -1,7 +1,7 @@
 <?php
 
 /**
- * WoW latest Guild Achievement Module
+ * WoW latest Guild Achievements Module
  *
  * @author     Branko Wilhelm <bw@z-index.net>
  * @link       http://www.z-index.net
