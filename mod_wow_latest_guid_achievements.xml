@@ -50,15 +50,14 @@
         </fields>
     </config>
     <!-- Joomla! 1.5 -->
-    <params name="basic">
+    <params>
         <param name="guild" type="text" default="" size="30" label="MOD_WOW_LATEST_GUILD_AV_GUILD_LABEL" description="MOD_WOW_LATEST_GUILD_AV_GUILD_DESC" />
         <param name="realm" type="text" default="" size="30" label="MOD_WOW_LATEST_GUILD_AV_REALM_LABEL" description="MOD_WOW_LATEST_GUILD_AV_REALM_DESC" />
         <param name="lang" type="text" default="en" size="30" label="MOD_WOW_LATEST_GUILD_AV_LANG_LABEL" description="MOD_WOW_LATEST_GUILD_AV_LANG_DESC" />
         <param name="region" type="text" default="us" size="30" label="MOD_WOW_LATEST_GUILD_AV_REGION_LABEL" description="MOD_WOW_LATEST_GUILD_AV_REGION_DESC" />
     </params>
-    <params name="advanced">
-        <param name="layout" type="modulelayout" label="JFIELD_ALT_LAYOUT_LABEL" description="JFIELD_ALT_MODULE_LAYOUT_DESC" />
-        <param name="moduleclass_sfx" type="text" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+    <params group="advanced">
+        <param name="moduleclass_sfx" type="text" label="Module Class Suffix" description="PARAMMODULECLASSSUFFIX" />
         <param name="cache_time" type="text" default="15" size="5" label="MOD_WOW_LATEST_GUILD_AV_CACHE_LABEL" description="MOD_WOW_LATEST_GUILD_AV_CACHE_DESC" />
         <param name="timeout" type="text" default="10" size="5" label="MOD_WOW_LATEST_GUILD_AV_TIMEOUT_LABEL" description="MOD_WOW_LATEST_GUILD_AV_TIMEOUT_DESC" />
         <param name="wowhead" type="radio" default="yes" label="MOD_WOW_LATEST_GUILD_AV_WOWHEAD_LABEL" description="MOD_WOW_LATEST_GUILD_AV_WOWHEAD_DESC">
