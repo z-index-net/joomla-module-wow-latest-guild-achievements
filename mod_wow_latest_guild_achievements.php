@@ -16,6 +16,6 @@ defined('_JEXEC') or die;
 // Include the syndicate functions only once
 require_once dirname(__FILE__) . '/helper.php';
 
-$achievements = (array) mod_wow_latest_guid_achievements::onload($params, $module);
+$achievements = (array) mod_wow_latest_guild_achievements::onload($params, $module);
 
 require JModuleHelper::getLayoutPath('mod_wow_latest_guid_achievements', $params->get('layout', 'default'));
