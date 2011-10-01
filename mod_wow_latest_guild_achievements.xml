@@ -8,7 +8,7 @@
     <license>http://www.gnu.org/licenses/gpl.html GNU/GPL version 3</license>
     <authorEmail>bw@z-index.net</authorEmail>
     <authorUrl>www.z-index.net</authorUrl>
-    <version>SVN_REVISION</version>
+    <version>@SVN_REVISION@</version>
     <description>Display latest WoW Guild Achievements.</description>
     <files>
         <filename module="mod_wow_latest_guild_achievements">mod_wow_latest_guild_achievements.php</filename>
@@ -72,7 +72,7 @@
             <option value="ru">Русский</option>
         </param>
     </params>
-    <updateservers>
+	<updateservers>
 		<server type="extension" priority="1" name="WoW latest Guild Achievements">http://www.z-index.net/joomla/wow-latest-guild-achievements/download/xml</server>
 	</updateservers>
 </install>
