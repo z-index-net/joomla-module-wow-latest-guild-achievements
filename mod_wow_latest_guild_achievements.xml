@@ -73,6 +73,6 @@
         </param>
     </params>
 	<updateservers>
-		<server type="extension" priority="1" name="WoW latest Guild Achievements">http://www.z-index.net/joomla/wow-latest-guild-achievements/download/xml</server>
+		<server type="extension" priority="1" name="WoW latest Guild Achievements">http://www.z-index.net/joomla/wow-latest-guild-achievements/download/extension.xml</server>
 	</updateservers>
 </install>
