@@ -6,7 +6,7 @@
  * @author     Branko Wilhelm <bw@z-index.net>
  * @link       http://www.z-index.net
  * @copyright  (c) 2011 Branko Wilhelm
- * @package    mod_wow_latest_guid_achievements
+ * @package    mod_wow_latest_guild_achievements
  * @license    GNU Public License <http://www.gnu.org/licenses/gpl.html>
  * @version    $Id$
  */
@@ -15,7 +15,7 @@ defined('_JEXEC') or die;
 
 jimport('joomla.cache.cache');
 
-class mod_wow_latest_guid_achievements {
+class mod_wow_latest_guild_achievements {
 
     public static $overall_points = null;
 
