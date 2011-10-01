@@ -39,7 +39,7 @@ class mod_wow_latest_guid_achievements {
         }
 
         // build battle net URL
-        $url = 'http://' . strtolower($params->get('region')) . '.battle.net/wow/' . strtolower($params->get('lang')) . '/guild/' . urlencode(strtolower($params->get('realm'))) . '/' . urlencode(strtolower($params->get('guild'))) . '/achievement';
+        $url = 'http://' . strtolower($params->get('region')) . '.battle.net/wow/' . strtolower($params->get('lang')) . '/guild/' . rawurlencode(strtolower($params->get('realm'))) . '/' . rawurlencode(strtolower($params->get('guild'))) . '/achievement';
 
         $cache = & JFactory::getCache(); // get cache obj
         $cache->setCaching(1); // enable cache for this module

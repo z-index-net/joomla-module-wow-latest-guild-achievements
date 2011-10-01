@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project name="mod_wow_armory_guild_news" basedir="." default="buildextension">
+<project name="mod_wow_latest_guild_achievements" basedir="." default="buildextension">
 	<property name="src" value="${project.basedir}" override="true" />
 
 	<property name="temp" value="/tmp/${phing.project.name}" override="true" />
