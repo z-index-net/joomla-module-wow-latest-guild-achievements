@@ -34,7 +34,7 @@ class mod_wow_latest_guild_achievements {
         }
 
         // wowhead script integration if wanted
-        if ($params->get('wowhead')) {
+        if ($params->get('wowhead') == 'yes') {
             JFactory::getDocument()->addScript(JURI::getInstance()->getScheme() . '://static.wowhead.com/widgets/power.js');
         }
 
