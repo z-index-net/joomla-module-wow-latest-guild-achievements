@@ -5,7 +5,7 @@
  *
  * @author     Branko Wilhelm <bw@z-index.net>
  * @link       http://www.z-index.net
- * @copyright  (c) 2011 Branko Wilhelm
+ * @copyright  (c) 2011 - 2012 Branko Wilhelm
  * @package    mod_wow_latest_guild_achievements
  * @license    GNU Public License <http://www.gnu.org/licenses/gpl.html>
  * @version    $Id$
@@ -23,23 +23,26 @@ class mod_wow_latest_guild_achievements {
 
         // all required paramters set?
         if (!$params->get('lang') || !$params->get('realm') || !$params->get('guild')) {
-            JError::raiseWarning(500, JText::_('please configure Module') . ' - ' . __CLASS__);
-            return;
+            return array('please configure Module' . ' - ' . __CLASS__);
         }
 
         // if curl installed?
         if (!function_exists('curl_init')) {
-            JError::raiseWarning(500, JText::_('php-curl extension not found'));
-            return;
+            return array('php-curl extension not found');
         }
+
+        $scheme = JURI::getInstance()->getScheme();
+        $realm = rawurlencode(strtolower($params->get('realm')));
+        $guild = rawurlencode(strtolower($params->get('guild')));
+        $lang = strtolower($params->get('lang'));
+        $region = strtolower($params->get('region'));
+        $wowhead_lang = strtolower($params->get('wowhead_lang'));
+        $url = 'http://' . $region . '.battle.net/wow/' . $lang . '/guild/' . $realm . '/' . $guild . '/achievement';
 
         // wowhead script integration if wanted
         if ($params->get('wowhead') == 'yes') {
-            JFactory::getDocument()->addScript(JURI::getInstance()->getScheme() . '://static.wowhead.com/widgets/power.js');
+            JFactory::getDocument()->addScript($scheme . '://static.wowhead.com/widgets/power.js');
         }
-
-        // build battle net URL
-        $url = 'http://' . strtolower($params->get('region')) . '.battle.net/wow/' . strtolower($params->get('lang')) . '/guild/' . rawurlencode(strtolower($params->get('realm'))) . '/' . rawurlencode(strtolower($params->get('guild'))) . '/achievement';
 
         $cache = & JFactory::getCache(); // get cache obj
         $cache->setCaching(1); // enable cache for this module
@@ -49,43 +52,46 @@ class mod_wow_latest_guild_achievements {
 
         $cache->setCaching(JFactory::getConfig()->getValue('config.caching')); // restore default cache mode
 
-        if (!strpos($result, '<div class="achievements-recent')) { // check if guild data exists
-            return JText::_('no guild data found');
+        if (!strpos($result['body'], '<div class="achievements-recent')) { // check if guild data exists
+            $err[] = '<strong>no guild data found</strong>';
+            if($result['errno'] != 0) {
+                $err[] = 'Error: ' . $result['error'] . ' (' . $result['errno'] . ')';
+            }
+            $err[] = 'battle.net URL: ' . JHTML::link($url, $guild);
+            $err[] = 'HTTP Code: ' . $result['info']['http_code'];
+            return $err;
         }
 
-        // TEST - overall achievement point
-        preg_match('#<div class="achievement-points">(.*)</div>#', $result, self::$overall_points);
-
         // get only achievement data
-        preg_match('#<div class="achievements-recent.*">(.*)<div id="achievement-list"#Uis', $result, $data);
+        preg_match('#<div class="achievements-recent.*">(.*)<div id="achievement-list"#Uis', $result['body'], $data);
 
         // find all achievements
         preg_match_all('#<a.*href="achievement\#[0-9:]+:a(\d+)".*>.*background-image: url\("(.*)"\);.*<strong class="title">(.*)</strong>#Uis', $data[1], $matches, PREG_SET_ORDER);
 
         foreach ($matches as $av) {
-            $ret[$av[1]] = new stdClass;
-            $ret[$av[1]]->av = $av[1];
-            $ret[$av[1]]->icon = $av[2];
-            $ret[$av[1]]->desc = $av[3];
+            $link = 'http://' . $params->get('wowhead_lang') . '.wowhead.com/achievement=' . $av[1];
+            $achievements[] = JHTML::link($link, JHTML::image($av[2]), array('title' => $av[3], 'target' => '_blank')) . ' ' . JHTML::link($link, $av[3], array('title' => $av[3], 'target' => '_blank'));
         }
 
-        return $ret;
+        return $achievements;
     }
 
     public static function curl($url, $timeout=10) {
         $curl = curl_init($url);
-        curl_setopt($curl, CURLOPT_USERAGENT, 'Joomla! WoW latest Guild Achievements Module; php/' . phpversion());
+        curl_setopt($curl, CURLOPT_USERAGENT, 'Joomla! ' . JVERSION . '; WoW latest Guild Achievements Module; php/' . phpversion());
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Connection: Close'));
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_AUTOREFERER, 1);
-        curl_setopt($curl, CURLOPT_ENCODING, 'gzip,deflate');
         curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
 
         $body = curl_exec($curl);
+        $info = curl_getinfo($curl);
+        $errno = curl_errno($curl);
+        $error = curl_error($curl);
 
         curl_close($curl);
 
-        return $body;
+        return array('info' => $info, 'errno' => $errno, 'error' => $error, 'body' => $body);
     }
 
 }

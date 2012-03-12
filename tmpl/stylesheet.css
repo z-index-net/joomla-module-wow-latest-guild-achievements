@@ -1,12 +1,8 @@
 /* $Id$ */
 
-div.mod_wow_latest_guild_achievements ul {
+div.mod_wow_latest_guild_achievements div {
     white-space: nowrap;
     overflow: hidden;
-}
-
-div.mod_wow_latest_guild_achievements ul li{
-    list-style-type: none;
 }
 
 div.mod_wow_latest_guild_achievements img {
