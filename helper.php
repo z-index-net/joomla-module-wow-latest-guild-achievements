@@ -70,7 +70,7 @@ class mod_wow_latest_guild_achievements {
 
         foreach ($matches as $av) {
             $link = 'http://' . $params->get('wowhead_lang') . '.wowhead.com/achievement=' . $av[1];
-            $achievements[] = JHTML::link($link, JHTML::image($av[2]), array('title' => $av[3], 'target' => '_blank')) . ' ' . JHTML::link($link, $av[3], array('title' => $av[3], 'target' => '_blank'));
+            $achievements[] = JHTML::link($link, JHTML::image($av[2], $av[3]), array('title' => $av[3], 'target' => '_blank')) . ' ' . JHTML::link($link, $av[3], array('title' => $av[3], 'target' => '_blank'));
         }
 
         return $achievements;
