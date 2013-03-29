@@ -5,7 +5,7 @@
  *
  * @author     Branko Wilhelm <bw@z-index.net>
  * @link       http://www.z-index.net
- * @copyright  (c) 2011 - 2012 Branko Wilhelm
+ * @copyright  (c) 2011 - 2013 Branko Wilhelm
  * @package    mod_wow_latest_guild_achievements
  * @license    GNU Public License <http://www.gnu.org/licenses/gpl.html>
  * @version    $Id$
@@ -50,7 +50,7 @@ class mod_wow_latest_guild_achievements {
 
         $result = $cache->call(array(__CLASS__, 'curl'), $url, $params->get('timeout')); // get cache data or reload cache
 
-        $cache->setCaching(JFactory::getConfig()->getValue('config.caching')); // restore default cache mode
+        $cache->setCaching(JFactory::getConfig()->get('caching')); // restore default cache mode
 
         if (!strpos($result['body'], '<div class="achievements-recent')) { // check if guild data exists
             $err[] = '<strong>no guild data found</strong>';
