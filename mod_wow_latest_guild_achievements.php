@@ -11,12 +11,26 @@
  * @version    $Id$
  */
 
-// no direct access
 defined('_JEXEC') or die;
 
-// Include the syndicate functions only once
 require_once dirname(__FILE__) . '/helper.php';
 
-$achievements = (array) mod_wow_latest_guild_achievements::onload($params, $module);
+$params->set('guild', rawurlencode(strtolower($params->get('guild'))));
+$params->set('realm', rawurlencode(strtolower($params->get('realm'))));
+$params->set('region', strtolower($params->get('region')));
+$params->set('lang', strtolower($params->get('lang', 'en')));
+$params->set('link', $params->get('link', 'battle.net'));
+
+$achievements = mod_wow_latest_guild_achievements::_($params);
+
+if(!is_array($achievements)) {
+	echo $achievements;
+	return;
+}
+
+if($params->get('link') == 'battle.net' && JPluginHelper::isEnabled('system', 'darktip')) {
+	require JModuleHelper::getLayoutPath($module->module, 'darktip');
+	return;
+}
 
 require JModuleHelper::getLayoutPath($module->module, $params->get('layout', 'default'));

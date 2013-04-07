@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- @Version $Id: mod_wow_latest_guild_achievements.xml 2 2011-09-17 16:36:01Z bRunO $ -->
+<!-- @Version $Id$ -->
 <extension type="module" version="1.6" client="site" method="upgrade">
     <name>WoW latest Guild Achievements</name>
     <author>Branko Wilhelm</author>
@@ -23,27 +23,38 @@
     <config>
         <fields name="params">
             <fieldset name="basic">
-                <field name="guild" type="text" default="" size="30" required="true" label="MOD_WOW_LATEST_GUILD_AV_GUILD_LABEL" description="MOD_WOW_LATEST_GUILD_AV_GUILD_DESC" />
-                <field name="realm" type="text" default="" size="30" required="true" label="MOD_WOW_LATEST_GUILD_AV_REALM_LABEL" description="MOD_WOW_LATEST_GUILD_AV_REALM_DESC" />
-                <field name="lang" type="text" default="en" size="30" required="true" label="MOD_WOW_LATEST_GUILD_AV_LANG_LABEL" description="MOD_WOW_LATEST_GUILD_AV_LANG_DESC" />
-                <field name="region" type="text" default="us" size="30" required="true" label="MOD_WOW_LATEST_GUILD_AV_REGION_LABEL" description="MOD_WOW_LATEST_GUILD_AV_REGION_DESC" />
+                <field name="guild" type="text" default="" size="30" required="true" label="MOD_WOW_LATEST_GUILD_ACHIEVEMENTS_GUILD_LABEL" description="MOD_WOW_LATEST_GUILD_ACHIEVEMENTS_GUILD_DESC" />
+                <field name="realm" type="text" default="" size="30" required="true" label="MOD_WOW_LATEST_GUILD_ACHIEVEMENTS_REALM_LABEL" description="MOD_WOW_LATEST_GUILD_ACHIEVEMENTS_REALM_DESC" />
+                <field name="region" type="list" default="" required="true" label="MOD_WOW_LATEST_GUILD_ACHIEVEMENTS_REGION_LABEL">
+                    <option value="">-- select --</option>
+                    <option value="us">USA</option>
+                    <option value="eu">Europe</option>
+                    <option value="kr">Korea</option>
+                    <option value="tw">Taiwan</option>
+                    <option value="sea">Southeast Asia</option>
+                </field>
+                <field name="lang" type="list" default="" required="true" label="MOD_WOW_LATEST_GUILD_ACHIEVEMENTS_LANG_LABEL">
+                    <option value="">-- select --</option>
+                    <option value="en">English</option>
+                    <option value="de">German</option>
+                    <option value="fr">Français</option>
+                    <option value="es">Español</option>
+                    <option value="it">Italiano</option>
+                    <option value="pt">Português</option>
+                    <option value="ru">Русский</option>
+                </field>
+                <field name="link" type="list" default="battle.net" required="true" label="MOD_WOW_LATEST_GUILD_ACHIEVEMENTS_LINK_LABEL">
+                    <option value="battle.net">battle.net</option>
+                    <option value="wowhead.com">wowhead.com</option>
+                    <option value="wowdb.com">wowdb.com</option>
+                    <option value="buffed.de">buffed.de</option>
+                </field>
             </fieldset>
             <fieldset name="advanced">
                 <field name="layout" type="modulelayout" label="JFIELD_ALT_LAYOUT_LABEL" description="JFIELD_ALT_MODULE_LAYOUT_DESC"/>
                 <field name="moduleclass_sfx" type="text" label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
-                <field name="cache_time" type="text" filter="integer" default="15" size="5" required="true" label="MOD_WOW_LATEST_GUILD_AV_CACHE_LABEL" description="MOD_WOW_LATEST_GUILD_AV_CACHE_DESC" />
-                <field name="timeout" type="text" filter="integer" default="10" size="5" required="true" label="MOD_WOW_LATEST_GUILD_AV_TIMEOUT_LABEL" description="MOD_WOW_LATEST_GUILD_AV_TIMEOUT_DESC" />
-                <field name="wowhead" type="radio" default="yes" label="MOD_WOW_LATEST_GUILD_AV_WOWHEAD_LABEL" description="MOD_WOW_LATEST_GUILD_AV_WOWHEAD_DESC">
-                    <option value="yes">JYES</option>
-                    <option value="no">JNO</option>
-                </field>
-                <field name="wowhead_lang" type="list" default="en" label="MOD_WOW_LATEST_GUILD_AV_WOWHEAD_LANG_LABEL" description="MOD_WOW_LATEST_GUILD_AV_WOWHEAD_LANG_DESC">
-                    <option value="en">English</option>
-                    <option value="de">Deutsch</option>
-                    <option value="fr">Français</option>
-                    <option value="es">Español</option>
-                    <option value="ru">Русский</option>
-                </field>
+                <field name="cache_time" type="text" filter="integer" default="15" size="5" required="true" label="MOD_WOW_LATEST_GUILD_ACHIEVEMENTS_CACHE_LABEL" description="MOD_WOW_LATEST_GUILD_ACHIEVEMENTS_CACHE_DESC" />
+                <field name="timeout" type="text" filter="integer" default="10" size="5" required="true" label="MOD_WOW_LATEST_GUILD_ACHIEVEMENTS_TIMEOUT_LABEL" description="MOD_WOW_LATEST_GUILD_ACHIEVEMENTS_TIMEOUT_DESC" />
             </fieldset>
         </fields>
     </config>
@@ -51,3 +62,15 @@
 		<server type="extension" priority="1" name="WoW latest Guild Achievements">http://www.z-index.net/en/joomla/wow-latest-guild-achievements/updatestream.xml</server>
 	</updateservers>
 </extension>
+
+<!-- 
+http://us.battle.net/wow/pt-br/guild/
+
+http://eu.battle.net/wow/de-de/guild/
+http://eu.battle.net/wow/en-gb/guild/
+http://eu.battle.net/wow/es-es/guild/
+http://eu.battle.net/wow/fr-fr/guild/
+http://eu.battle.net/wow/it-it/guild/
+http://eu.battle.net/wow/pt-pt/guild/
+http://eu.battle.net/wow/ru-ru/guild/
+ -->
