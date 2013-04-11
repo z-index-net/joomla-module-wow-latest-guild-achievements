@@ -13,13 +13,11 @@
 
 defined('_JEXEC') or die;
 
-jimport('joomla.http.http');
-
 abstract class mod_wow_latest_guild_achievements {
 	
     public static function _(JRegistry &$params) {
 
-        if (!$params->get('lang') || !$params->get('realm') || !$params->get('guild')) {
+        if(!$params->get('lang') || !$params->get('realm') || !$params->get('guild')) {
             return 'please configure Module - ' . __CLASS__;
         }
 
@@ -44,33 +42,32 @@ abstract class mod_wow_latest_guild_achievements {
         	$cache->store($result, $key);
         }
          
-        if($result->code != 200 || !strpos($result->body, '<div class="achievements-recent')) {
+        if($result->code != 200) {
         	return __CLASS__ . ' HTTP-Status ' . JHTML::_('link', 'http://wikipedia.org/wiki/List_of_HTTP_status_codes#'.$result->code, $result->code, array('target' => '_blank'));
+        }
+        
+        if(strpos($result->body, '<div class="achievements-recent profile-box-full">') === false) {
+        	return 'no achievements found';
         }
 
         // get only achievement data
-        preg_match('#<div class="achievements-recent.*">(.*)<div id="achievement-list"#Uis', $result->body, $result->body);
+        preg_match('#<div class="achievements-recent profile-box-full">(.+?)</div>#is', $result->body, $result->body);
         
         $result->body = $result->body[1];
-
+        
         // find all achievements
         preg_match_all('#<a.*href="achievement\#([0-9:]+):a(\d+)".*>.*background-image: url\("(.*)"\);.*<strong class="title">(.*)</strong>#Uis', $result->body, $matches, PREG_SET_ORDER);
         
-        if(empty($matches)) {
-        	return __CLASS__ . 'no achievements found?!';
-        }
-        
-        $achievements = array();
         foreach($matches as $key => $match) {
             $achievements[$key] = new stdClass;
             $achievements[$key]->name = $match[4];
             $achievements[$key]->image = $match[3];
             $achievements[$key]->id = $match[2];
-            $achievements[$key]->link = $url . '#' . $match[1] . ':' . $match[2];
+            $achievements[$key]->link = $url . '#' . $match[1] . ':a' . $match[2];
             $achievements[$key]->link = self::link($achievements[$key], $params);
        }
         
-        return $achievements;
+       return $achievements;
     }
     
     private static function link(stdClass $achievement, JRegistry &$params) {

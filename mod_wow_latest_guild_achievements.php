@@ -28,9 +28,4 @@ if(!is_array($achievements)) {
 	return;
 }
 
-if($params->get('link') == 'battle.net' && JPluginHelper::isEnabled('system', 'darktip')) {
-	require JModuleHelper::getLayoutPath($module->module, 'darktip');
-	return;
-}
-
 require JModuleHelper::getLayoutPath($module->module, $params->get('layout', 'default'));
