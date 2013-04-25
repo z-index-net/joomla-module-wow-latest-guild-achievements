@@ -7,7 +7,7 @@
  * @link       http://www.z-index.net
  * @copyright  (c) 2011 - 2013 Branko Wilhelm
  * @package    mod_wow_latest_guild_achievements
- * @license    GNU General Public License v3
+ * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  * @version    $Id$
  */
 
@@ -16,11 +16,6 @@ defined('_JEXEC') or die;
 abstract class mod_wow_latest_guild_achievements {
 	
     public static function _(JRegistry &$params) {
-
-        if(!$params->get('lang') || !$params->get('realm') || !$params->get('guild')) {
-            return 'please configure Module - ' . __CLASS__;
-        }
-
         $url = 'http://' . $params->get('region') . '.battle.net/wow/' . $params->get('lang') . '/guild/' . $params->get('realm') . '/' . $params->get('guild') . '/achievement';
         
         $cache = JFactory::getCache(__CLASS__, 'output');
@@ -65,9 +60,9 @@ abstract class mod_wow_latest_guild_achievements {
             $achievements[$key]->id = $match[2];
             $achievements[$key]->link = $url . '#' . $match[1] . ':a' . $match[2];
             $achievements[$key]->link = self::link($achievements[$key], $params);
-       }
+        }
         
-       return $achievements;
+        return $achievements;
     }
     
     private static function link(stdClass $achievement, JRegistry &$params) {
