@@ -14,7 +14,7 @@ abstract class mod_wow_latest_guild_achievements {
     public static function _(JRegistry &$params) {
         $url = 'http://' . $params->get('region') . '.battle.net/wow/' . $params->get('lang') . '/guild/' . $params->get('realm') . '/' . $params->get('guild') . '/achievement';
 
-        $cache = JFactory::getCache(__CLASS__, 'output');
+        $cache = JFactory::getCache('wow', 'output');
         $cache->setCaching(1);
         $cache->setLifeTime($params->get('cache_time', 60));
          
