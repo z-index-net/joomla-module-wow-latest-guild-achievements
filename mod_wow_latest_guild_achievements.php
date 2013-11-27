@@ -19,9 +19,9 @@ $params->set('link', $params->get('link', 'battle.net'));
 
 $achievements = mod_wow_latest_guild_achievements::_($params);
 
-if(!is_array($achievements)) {
-	echo $achievements;
-	return;
+if (!is_array($achievements)) {
+    echo $achievements;
+    return;
 }
 
 require JModuleHelper::getLayoutPath($module->module, $params->get('layout', 'default'));

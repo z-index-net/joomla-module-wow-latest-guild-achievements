@@ -13,9 +13,9 @@ JFactory::getDocument()->addStyleSheet(JUri::base(true) . '/modules/' . $module-
 ?>
 <div class="mod_wow_latest_guild_achievements">
     <?php foreach ($achievements as $achievement): ?>
-    <div>
-    <?php echo JHtml::link($achievement->link, JHtml::image($achievement->image, $achievement->name), array('title' => $achievement->name, 'target' => '_blank')); ?>
-    <?php echo JHtml::link($achievement->link, $achievement->name, array('title' => $achievement->name, 'target' => '_blank')); ?>
-    </div>
+        <div>
+            <?php echo JHtml::link($achievement->link, JHtml::image($achievement->image, $achievement->name), array('title' => $achievement->name, 'target' => '_blank')); ?>
+            <?php echo JHtml::link($achievement->link, $achievement->name, array('title' => $achievement->name, 'target' => '_blank')); ?>
+        </div>
     <?php endforeach; ?>
 </div>
