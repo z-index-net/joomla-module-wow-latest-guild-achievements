@@ -1,6 +1,7 @@
 div.mod_wow_latest_guild_achievements div {
     white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 div.mod_wow_latest_guild_achievements img {

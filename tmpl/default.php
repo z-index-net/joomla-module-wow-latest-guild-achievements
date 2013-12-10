@@ -9,7 +9,7 @@
 
 defined('_JEXEC') or die;
 
-JFactory::getDocument()->addStyleSheet(JUri::base(true) . '/modules/' . $module->module . '/tmpl/stylesheet.css');
+JFactory::getDocument()->addStyleSheet(JUri::base(true) . '/modules/' . $module->module . '/tmpl/default.css');
 ?>
 <div class="mod_wow_latest_guild_achievements">
     <?php foreach ($achievements as $achievement): ?>
