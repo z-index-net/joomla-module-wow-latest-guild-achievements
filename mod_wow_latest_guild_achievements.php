@@ -9,17 +9,11 @@
 
 defined('_JEXEC') or die;
 
-require_once dirname(__FILE__) . '/helper.php';
+JLoader::register('ModWowLatestGuildAchievementsHelper', dirname(__FILE__) . '/helper.php');
 
-$params->set('guild', rawurlencode(str_replace(' ', '_', JString::strtolower($params->get('guild')))));
-$params->set('realm', rawurlencode(JString::strtolower($params->get('realm'))));
-$params->set('region', JString::strtolower($params->get('region')));
-$params->set('lang', JString::strtolower($params->get('lang', 'en')));
-$params->set('link', $params->get('link', 'battle.net'));
+$achievements = ModWowLatestGuildAchievementsHelper::getData($params);
 
-$achievements = mod_wow_latest_guild_achievements::_($params);
-
-if (!is_array($achievements)) {
+if (!$params->get('ajax') && !is_array($achievements)) {
     echo $achievements;
     return;
 }

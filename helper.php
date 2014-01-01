@@ -9,11 +9,41 @@
 
 defined('_JEXEC') or die;
 
-abstract class mod_wow_latest_guild_achievements
+abstract class ModWowLatestGuildAchievementsHelper
 {
 
-    public static function _(JRegistry &$params)
+    public static function getAjax()
     {
+        $module = JModuleHelper::getModule('mod_' . JFactory::getApplication()->input->get('module'));
+
+        if (empty($module)) {
+            return false;
+        }
+
+        JFactory::getLanguage()->load($module->module);
+
+        $params = new JRegistry($module->params);
+        $params->set('ajax', 0);
+
+        ob_start();
+
+        require(dirname(__FILE__) . '/' . $module->module . '.php');
+
+        return ob_get_clean();
+    }
+
+    public static function getData(JRegistry &$params)
+    {
+        if ($params->get('ajax')) {
+            return;
+        }
+
+        $params->set('guild', rawurlencode(str_replace(' ', '_', JString::strtolower($params->get('guild')))));
+        $params->set('realm', rawurlencode(JString::strtolower($params->get('realm'))));
+        $params->set('region', JString::strtolower($params->get('region')));
+        $params->set('lang', JString::strtolower($params->get('lang', 'en')));
+        $params->set('link', $params->get('link', 'battle.net'));
+
         $url = 'http://' . $params->get('region') . '.battle.net/wow/' . $params->get('lang') . '/guild/' . $params->get('realm') . '/' . $params->get('guild') . '/achievement';
 
         $cache = JFactory::getCache('wow', 'output');
@@ -24,7 +54,7 @@ abstract class mod_wow_latest_guild_achievements
 
         if (!$result = $cache->get($key)) {
             try {
-                $http = new JHttp(new JRegistry, new JHttpTransportCurl(new JRegistry));
+                $http = JHttpFactory::getHttp();
                 $http->setOption('userAgent', 'Joomla! ' . JVERSION . '; WoW latest Guild Achievements Module; php/' . phpversion());
 
                 $result = $http->get($url, null, $params->get('timeout', 10));
