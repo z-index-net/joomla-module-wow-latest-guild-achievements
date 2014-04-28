@@ -3,7 +3,7 @@
 /**
  * @author     Branko Wilhelm <branko.wilhelm@gmail.com>
  * @link       http://www.z-index.net
- * @copyright  (c) 2013 Branko Wilhelm
+ * @copyright  (c) 2013 - 2014 Branko Wilhelm
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  */
 
@@ -48,14 +48,14 @@ abstract class ModWowLatestGuildAchievementsHelper
 
         $cache = JFactory::getCache('wow', 'output');
         $cache->setCaching(1);
-        $cache->setLifeTime($params->get('cache_time', 60));
+        $cache->setLifeTime($params->get('cache_time', 60) * 60);
 
         $key = md5($url);
 
         if (!$result = $cache->get($key)) {
             try {
                 $http = JHttpFactory::getHttp();
-                $http->setOption('userAgent', 'Joomla! ' . JVERSION . '; WoW latest Guild Achievements Module; php/' . phpversion());
+                $http->setOption('userAgent', 'Joomla! ' . JVERSION . '; WoW latest Guild Achievements; php/' . phpversion());
 
                 $result = $http->get($url, null, $params->get('timeout', 10));
             } catch (Exception $e) {
@@ -81,6 +81,7 @@ abstract class ModWowLatestGuildAchievementsHelper
         // find all achievements
         preg_match_all('#<a.*href="achievement\#([0-9:]+):a(\d+)".*>.*background-image: url\("(.*)"\);.*<strong class="title">(.*)</strong>#Uis', $result->body, $matches, PREG_SET_ORDER);
 
+        $achievements = array();
         foreach ($matches as $key => $match) {
             $achievements[$key] = new stdClass;
             $achievements[$key]->name = $match[4];
