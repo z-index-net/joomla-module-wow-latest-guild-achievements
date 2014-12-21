@@ -3,103 +3,59 @@
 /**
  * @author     Branko Wilhelm <branko.wilhelm@gmail.com>
  * @link       http://www.z-index.net
- * @copyright  (c) 2013 - 2014 Branko Wilhelm
+ * @copyright  (c) 2011 - 2015 Branko Wilhelm
  * @license    GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  */
 
 defined('_JEXEC') or die;
 
-abstract class ModWowLatestGuildAchievementsHelper
+class ModWowLatestGuildAchievementsHelper extends WoWModuleAbstract
 {
-
-    public static function getAjax()
+    protected function getInternalData()
     {
-        $module = JModuleHelper::getModule('mod_' . JFactory::getApplication()->input->get('module'));
+        $wow = WoW::getInstance();
 
-        if (empty($module)) {
-            return false;
+        try {
+            $adapter = $wow->getAdapter('WoWAPI');
+            $result = $adapter->getData('guild');
+        } catch (Exception $e) {
+            return $e->getMessage();
         }
-
-        JFactory::getLanguage()->load($module->module);
-
-        $params = new JRegistry($module->params);
-        $params->set('ajax', 0);
-
-        ob_start();
-
-        require(dirname(__FILE__) . '/' . $module->module . '.php');
-
-        return ob_get_clean();
-    }
-
-    public static function getData(JRegistry &$params)
-    {
-        if ($params->get('ajax')) {
-            return;
-        }
-
-        $params->set('guild', rawurlencode(str_replace(' ', '_', JString::strtolower($params->get('guild')))));
-        $params->set('realm', rawurlencode(JString::strtolower($params->get('realm'))));
-        $params->set('region', JString::strtolower($params->get('region')));
-        $params->set('lang', JString::strtolower($params->get('lang', 'en')));
-        $params->set('link', $params->get('link', 'battle.net'));
-
-        $url = 'http://' . $params->get('region') . '.battle.net/wow/' . $params->get('lang') . '/guild/' . $params->get('realm') . '/' . $params->get('guild') . '/achievement';
-
-        $cache = JFactory::getCache('wow', 'output');
-        $cache->setCaching(1);
-        $cache->setLifeTime($params->get('cache_time', 60) * 60);
-
-        $key = md5($url);
-
-        if (!$result = $cache->get($key)) {
-            try {
-                $http = JHttpFactory::getHttp();
-                $http->setOption('userAgent', 'Joomla! ' . JVERSION . '; WoW latest Guild Achievements; php/' . phpversion());
-
-                $result = $http->get($url, null, $params->get('timeout', 10));
-            } catch (Exception $e) {
-                return $e->getMessage();
-            }
-
-            $cache->store($result, $key);
-        }
-
-        if ($result->code != 200) {
-            return __CLASS__ . ' HTTP-Status ' . JHtml::_('link', 'http://wikipedia.org/wiki/List_of_HTTP_status_codes#' . $result->code, $result->code, array('target' => '_blank'));
-        }
-
-        if (strpos($result->body, '<div class="achievements-recent profile-box-full">') === false) {
-            return 'no achievements found';
-        }
-
-        // get only achievement data
-        preg_match('#<div class="achievements-recent profile-box-full">(.+?)</div>#is', $result->body, $result->body);
-
-        $result->body = $result->body[1];
-
-        // find all achievements
-        preg_match_all('#<a.*href="achievement\#([0-9:]+):a(\d+)".*>.*background-image: url\("(.*)"\);.*<strong class="title">(.*)</strong>#Uis', $result->body, $matches, PREG_SET_ORDER);
 
         $achievements = array();
-        foreach ($matches as $key => $match) {
-            $achievements[$key] = new stdClass;
-            $achievements[$key]->name = $match[4];
-            $achievements[$key]->image = $match[3];
-            $achievements[$key]->id = $match[2];
-            $achievements[$key]->link = $url . '#' . $match[1] . ':a' . $match[2];
-            $achievements[$key]->link = self::link($achievements[$key], $params);
+        foreach ($result->body->achievements->achievementsCompleted as $key => $achievement) {
+            $achievements[$achievement] = new stdClass;
+            $achievements[$achievement]->timestamp = $result->body->achievements->achievementsCompletedTimestamp[$key];
+        }
+
+        arsort($achievements);
+
+        $achievements = array_slice($achievements, 0, $this->params->module->get('rows', 10) ? $this->params->module->get('rows', 10) : count($achievements), true);
+
+        foreach ($achievements as $key => $achievement) {
+            try {
+                $result = $adapter->getAchievement($key);
+            } catch (Exception $e) {
+                unset($achievements[$key]);
+                continue;
+            }
+
+            $achievements[$key]->id = $key;
+            $achievements[$key]->name = $result->body->title;
+            $achievements[$key]->image = 'http://media.blizzard.com/wow/icons/18/' . $result->body->icon . '.jpg';
+            $achievements[$key]->link = $wow->getBattleNetUrl() . 'achievement#15080:a' . $key; // TODO 15080 ??
+            $achievements[$key]->link = $this->link($achievements[$key]);
+            $achievements[$key]->raw = $result->body;
         }
 
         return $achievements;
     }
 
-    private static function link(stdClass $achievement, JRegistry &$params)
+    private function link(stdClass $achievement)
     {
         $sites['battle.net'] = $achievement->link;
-        $sites['wowhead.com'] = 'http://' . $params->get('lang') . '.wowhead.com/achievement=' . $achievement->id;
-        $sites['wowdb.com'] = 'http://www.wowdb.com/achievements/' . $achievement->id;
-        $sites['buffed.de'] = 'http://wowdata.buffed.de/?a=' . $achievement->id;
-        return $sites[$params->get('link')];
+        $sites['wowhead.com'] = 'http://' . $this->params->global->get('locale') . '.wowhead.com/achievement=' . $achievement->id;
+
+        return $sites[$this->params->global->get('link')];
     }
 }
