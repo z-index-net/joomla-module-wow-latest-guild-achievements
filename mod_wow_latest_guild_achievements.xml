@@ -22,7 +22,7 @@
         <language tag="de-DE">de-DE/de-DE.mod_wow_latest_guild_achievements.sys.ini</language>
     </languages>
     <updateservers>
-        <server type="collection" priority="1" name="z-index development">http://www.z-index.net/en/extensions.xml</server>
+        <server type="extension" priority="1" name="WoW latest Guild Achievements">https://raw.githubusercontent.com/z-index-net/joomla-module-wow-latest-guild-achievements/master/updatestream.xml</server>
     </updateservers>
     <media folder="media" destination="mod_wow_latest_guild_achievements">
         <folder>css</folder>
